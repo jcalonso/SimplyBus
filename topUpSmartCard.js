@@ -1,5 +1,4 @@
 var casper = require('casper').create();
-
 var fs = require('fs');
 var personalData = JSON.parse(fs.read('cardData.json'));
 
@@ -45,12 +44,18 @@ var years = [
     '2025'
 ];
 
+/**
+ * Do login
+ */
 casper.start(SIMPLYBUS_URL, function () {
     this.sendKeys('#loginISRN', USERNAME);
     this.sendKeys('#loginPassword', PASSWORD);
     this.click('#loginButton');
 });
 
+/**
+ * Click on the 'Top up' link
+ */
 casper.then(function () {
     casper.waitForSelector('#chNames b', function () {
         this.wait(2000, function () {
@@ -61,6 +66,10 @@ casper.then(function () {
     });
 });
 
+/**
+ * Select the amount for Top Up, it will be only one option
+ * depending on your card it can be a week or a month
+ */
 casper.then(function () {
     casper.waitUntilVisible('.optionClass', function () {
         this.wait(5000, function () {
@@ -75,6 +84,9 @@ casper.then(function () {
     });
 });
 
+/**
+ * Verify the amount to be charged and proceed to payment page
+ */
 casper.then(function () {
     casper.waitForSelector('#totalPaymentRyw', function () {
         this.echo('Total to be charged: ' + this.fetchText('#totalPaymentRyw'));
@@ -83,6 +95,9 @@ casper.then(function () {
     });
 });
 
+/**
+ * Enter credit card details and confirm
+ */
 casper.then(function () {
     casper.waitForSelector('#paymentBox', function () {
         this.wait(1000, function () {
@@ -104,6 +119,10 @@ casper.then(function () {
     });
 });
 
+/**
+ * Proceed with the bank authorization
+ * Note: This script has been tested with TSB.
+ */
 casper.then(function () {
     this.evaluate(function () {
         var iFrame = document.getElementById('3DSecureFrame').contentDocument;
@@ -112,6 +131,9 @@ casper.then(function () {
     });
 });
 
+/**
+ * Wait 30 seconds to finish the transaction
+ */
 casper.then(function () {
     this.wait(30000, function () {
         this.echo('Waited for 10 secs');
@@ -119,11 +141,22 @@ casper.then(function () {
     });
 });
 
+/**
+ * TODO: After the payment has been approved confirm and take a screen shot
+ */
+casper.then(function(){});
+
+/**
+ * Confirm the confirm?
+ */
 casper.setFilter('page.confirm', function (msg) {
     this.echo(msg);
     return true;
 });
 
+/**
+ * Close any alerts
+ */
 casper.setFilter('remote.alert', function (msg) {
     this.echo(msg);
     return true;

@@ -1,0 +1,13 @@
+{
+  "credentials": {
+    "username": "",
+    "password": ""
+  },
+  "card": {
+    "number": "",
+    "name": "",
+    "pin": "",
+    "month": "",
+    "year": ""
+  }
+}

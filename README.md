@@ -24,4 +24,6 @@ You should receive a confirmation email after the process has been completed.
 
 If you want to debug the script and see what is it doing in the background use SlimerJs as engine, like this:
 
-`casperjs topUpSmartCard.js --engine=slimerjs --ssl-protocol-any`
+`export SLIMERJSLAUNCHER=/Applications/Firefox.app/Contents/MacOS/firefox`
+`casperjs topUpSmartCard.js --engine=slimerjs --ssl-protocol=any`
+

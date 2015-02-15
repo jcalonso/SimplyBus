@@ -104,7 +104,6 @@ casper.then(function () {
             this.sendKeys('#ccnumber', CARD_NUMBER);
             this.sendKeys('#ccname', CARD_NAME);
             this.sendKeys('#cccsc', CARD_PIN);
-            this.echo(months.indexOf(CARD_MONTH));
             this.evaluate(function (monthIndex, yearIndex) {
                 $('#ccmonth')[0].selectedIndex = monthIndex;
                 $('#ccyear')[0].selectedIndex = yearIndex;
@@ -121,31 +120,31 @@ casper.then(function () {
 
 /**
  * Proceed with the bank authorization
- * Note: This script has been tested with TSB.
+ * Note: This script has been tested with TSB only.
  */
 casper.then(function () {
-    this.evaluate(function () {
-        var iFrame = document.getElementById('3DSecureFrame').contentDocument;
-        $(iFrame).find('form input[type="submit"]').click();
-        this.capture('step5.png', viewPort);
-    });
-});
-
-/**
- * Wait 30 seconds to finish the transaction
- */
-casper.then(function () {
-    this.wait(30000, function () {
-        this.echo('Waited for 10 secs');
+    this.wait(2000, function () {
+        this.evaluate(function () {
+            var iFrame = document.getElementById('3DSecureFrame').contentDocument;
+            $(iFrame).find('form').submit();
+            this.capture('step5.png', viewPort);
+        });
         this.capture('step6.png', viewPort);
     });
 });
 
 /**
- * TODO: After the payment has been approved confirm and take a screen shot
+ * After the payment has been approved confirm and take a screen shot
  */
-casper.then(function(){});
-
+casper.then(function () {
+    this.waitForText('Top Up Confirmation',function(){
+        this.echo("Done");
+        this.capture('step7.png', viewPort);
+    },function(){
+        this.echo("Expired");
+        this.capture('step8.png', viewPort);
+    },30000);
+});
 /**
  * Confirm the confirm?
  */

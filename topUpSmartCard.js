@@ -137,13 +137,16 @@ casper.then(function () {
  * After the payment has been approved confirm and take a screen shot
  */
 casper.then(function () {
-    this.waitForText('Top Up Confirmation',function(){
-        this.echo("Done");
-        this.capture('step7.png', viewPort);
-    },function(){
-        this.echo("Expired");
-        this.capture('step8.png', viewPort);
-    },30000);
+    this.wait(60000, function () {
+        this.waitForText('Top Up Confirmation', function () {
+            this.echo("Done");
+            this.capture('step7.png', viewPort);
+        }, function () {
+            this.echo("Expired");
+            this.capture('step8.png', viewPort);
+        }, 2000);
+    });
+
 });
 /**
  * Confirm the confirm?
